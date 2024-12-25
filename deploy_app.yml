@@ -1,0 +1,61 @@
+---
+- name: Uygulamayı GitHub'dan indir ve Docker ile başlat
+  hosts: all
+  become: true
+  vars:
+    repo_url: "https://github.com/yasirkelesh/INCEPTION.git"  # GitHub reposu URL'si
+    repo_name: "INCEPTION"  # Depo adı (aynı zamanda klasör adı olacak)
+  tasks:
+    - name: Git kurulu mu?
+      ansible.builtin.yum:
+        name: git
+        state: present
+      when: ansible_os_family == "RedHat"
+    
+    - name: Git kurulu mu?
+      ansible.builtin.apt:
+        name: git
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Docker deposunu ekle (Ubuntu/Debian)
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+        state: present
+      when: ansible_os_family == "Debian"
+    
+    - name: GPG anahtarını ekle
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_os_family == "Debian"
+    
+    - name: Paket listesini güncelle
+      ansible.builtin.apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+    
+    - name: Docker'ı yükle
+      ansible.builtin.apt:
+        name: docker-ce
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: GitHub reposunu klonla
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "/home/{{ ansible_user }}/{{ repo_name }}"
+        update: yes
+
+    - name: Docker servisini başlat
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Docker ile uygulamayı çalıştır
+      ansible.builtin.shell: |
+        cd /home/{{ ansible_user }}/{{ repo_name }}
+        make all
+      args:
+        chdir: "/home/{{ ansible_user }}/{{ repo_name }}"
