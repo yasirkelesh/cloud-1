@@ -13,8 +13,8 @@
         name: git
         state: present
       when: ansible_os_family == "Debian"
-  
-   - name: GPG anahtarını ekle
+
+    - name: GPG anahtarını ekle
       ansible.builtin.apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
@@ -25,7 +25,7 @@
         repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
         state: present
       when: ansible_os_family == "Debian"
-      
+
     - name: Paket listesini güncelle
       ansible.builtin.apt:
         update_cache: yes
@@ -38,21 +38,25 @@
       when: ansible_os_family == "Debian"
 
     - name: Get the latest Docker Compose version
-      command: "curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4"
+      shell: |
+        curl -s https://api.github.com/repos/docker/compose/releases/latest | grep '"tag_name"' | cut -d'"' -f4
       register: compose_version
 
     - name: Download and install Docker Compose
-      command: "curl -L https://github.com/docker/compose/releases/download/{{ compose_version.stdout }}/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
+      shell: |
+        curl -L https://github.com/docker/compose/releases/download/{{ compose_version.stdout }}/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
       when: compose_version.stdout is defined
+    
 
     - name: Make Docker Compose executable
-      command: "chmod +x /usr/local/bin/docker-compose"
+      command: chmod +x /usr/local/bin/docker-compose
     
     - name: Download bash completion for Docker Compose
-      command: "curl -L https://raw.githubusercontent.com/docker/compose/{{ compose_version.stdout }}/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose"
+      command: >
+        curl -L https://raw.githubusercontent.com/docker/compose/{{ compose_version.stdout }}/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
 
     - name: Verify Docker Compose installation
-      command: "/usr/local/bin/docker-compose -v"
+      command: /usr/local/bin/docker-compose -v
       register: compose_version_check
 
     - name: Show docker-compose version

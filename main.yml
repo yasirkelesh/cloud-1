@@ -1,8 +1,11 @@
 - name: Main Playbook
   hosts: all
   tasks:
-    - name: suncuyu hazırla
-      import_playbook: server_preparation.yml
+    - name: Prepare the server
+      ansible.builtin.shell: echo "Preparing server"
+    
+    - name: Deploy the application
+      ansible.builtin.shell: echo "Deploying app"
 
-    - name: uygulamayı yayınla
-      import_playbook: deploy_app.yml
+- import_playbook: server_preparation.yml
+- import_playbook: deploy_app.yml
