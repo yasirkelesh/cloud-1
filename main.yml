@@ -1,0 +1,8 @@
+- name: Main Playbook
+  hosts: all
+  tasks:
+    - name: suncuyu hazırla
+      import_playbook: server_preparation.yml
+
+    - name: uygulamayı yayınla
+      import_playbook: deploy_app.yml

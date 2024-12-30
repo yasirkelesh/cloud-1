@@ -1,2 +1,2 @@
 [myservers]
-ec2-52-206-211-179.compute-1.amazonaws.com ansible_user=ubuntu ansible_ssh_private_key_file=/personalPem/personal.pem ansible_connection=ssh
+ec2-52-206-211-179.compute-1.amazonaws.com ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/personal.pem  ansible_connection=ssh
