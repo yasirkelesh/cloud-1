@@ -46,6 +46,25 @@
         repo: "{{ repo_url }}"
         dest: "/home/{{ ansible_user }}/{{ repo_name }}"
         update: yes
+    
+    - name: .env dosyasını oluştur
+      ansible.builtin.shell: |
+        cd /home/{{ ansible_user }}/{{ repo_name }}/srcs
+        cat > .env <<EOF
+        WP_URL=ecole417.duckdns.org
+        WP_TITLE=wordpress
+
+        WP_ADMIN_LOGIN=superuser
+        WP_ADMIN_PASSWORD=superuser
+        WP_ADMIN_EMAIL=superuser@ecole417.duckdns.org
+
+        WP_USER_LOGIN=mukeles
+        WP_USER_PASSWORD=12345
+        WP_USER_EMAIL=mukeles@ecole417.duckdns.org
+        EOF
+      args:
+        executable: /bin/bash
+
 
     - name: Docker servisini başlat
       ansible.builtin.service:
@@ -53,6 +72,11 @@
         state: started
         enabled: true
 
+    - name: sertfika al
+      ansible.builtin.shell: |
+        cd /home/{{ ansible_user }}/{{ repo_name }}/srcs
+        bash letsEncrypt.sh
+    
     - name: Docker ile uygulamayı çalıştır
       ansible.builtin.shell: |
         cd /home/{{ ansible_user }}/{{ repo_name }}
