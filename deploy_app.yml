@@ -41,11 +41,6 @@
       ansible.builtin.shell: |
         cd /home/{{ ansible_user }}/{{ repo_name }}/srcs
         bash letsEncrypt.sh
-    - name: Install make
-      ansible.builtin.apt:
-        name: make
-        state: present
-        update_cache: yes
 
     - name: Docker ile uygulamayı çalıştır
       ansible.builtin.shell: |

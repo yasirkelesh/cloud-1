@@ -13,7 +13,13 @@
         name: git
         state: present
       when: ansible_os_family == "Debian"
-
+    
+    - name: Install make
+      ansible.builtin.apt:
+        name: make
+        state: present
+        update_cache: yes
+    
     - name: GPG anahtarını ekle
       ansible.builtin.apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
@@ -46,7 +52,7 @@
       shell: |
         curl -L https://github.com/docker/compose/releases/download/{{ compose_version.stdout }}/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
       when: compose_version.stdout is defined
-    
+
 
     - name: Make Docker Compose executable
       command: chmod +x /usr/local/bin/docker-compose

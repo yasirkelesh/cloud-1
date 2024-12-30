@@ -1,1 +1,1 @@
-ansible-playbook -i inventory deploy_app.yml
+ansible-playbook -i inventory main.yml
