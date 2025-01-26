@@ -16,16 +16,6 @@
       ansible.builtin.shell: |
         cd /home/{{ ansible_user }}/{{ repo_name }}/srcs
         cat > .env <<EOF
-        WP_URL=ecole417.duckdns.org
-        WP_TITLE=wordpress
-
-        WP_ADMIN_LOGIN=superuser
-        WP_ADMIN_PASSWORD=superuser
-        WP_ADMIN_EMAIL=superuser@ecole417.duckdns.org
-
-        WP_USER_LOGIN=mukeles
-        WP_USER_PASSWORD=12345
-        WP_USER_EMAIL=mukeles@ecole417.duckdns.org
         EOF
       args:
         executable: /bin/bash
