@@ -1,11 +1,31 @@
-# Cloud-1: Automated deployment of Inception with Ansible
+# Cloud-1
 
-## 📖 Overview
-This topic is inspired by the subject Inception. The goal is to deploy your site and the
-necessary docker infrastructure on an instance provided by a cloud provider.
-In this version, each process will have its container. You CANNOT deploy the same
-images from Inception and be done with it ;) You can of course get the source of the
-website (Your WordPress blog for instance), but you have to deploy it using a container
-per process and automation.
-Automation is essential here. 
+Bu proje, bir web sitesini (örneğin WordPress) ve gerekli Docker altyapısını bir bulut sağlayıcısında otomatik olarak dağıtmak için tasarlanmıştır. Her süreç (web sunucusu, veritabanı vb.) kendi konteynerinde çalışır ve dağıtım, Ansible ile otomatize edilerek tekrarlanabilir hale getirilir. Proje, genel bir bulut yaklaşımı sunsa da, AWS gibi popüler sağlayıcılarla uyumludur.
 
+## Önkoşullar
+
+Başlamadan önce aşağıdaki gereksinimlerin karşılandığından emin olun:
+- **Ansible**: Sisteminizde kurulu olmalı (pip install ansible ile kurabilirsiniz).
+- **Docker**: Bulut örneğinde Docker kullanılacağı için temel Docker bilgisi faydalı olabilir.
+- **AWS CLI (isteğe bağlı)**: AWS kullanıyorsanız, aws configure ile kimlik bilgilerini ayarlayın.
+- **SSH Anahtarı**: Bulut örneğine bağlanmak için bir anahtar çifti oluşturun.
+
+
+## Kurulum
+
+
+### Adımlar
+1. **Depoyu Klonla**
+   ```bash
+   git clone <repository_url>
+   cd cloud-1
+2. **Bulut Sağlayıcı Kimlik Bilgilerini Ayarlayın**
+    Örneğin, AWS için:
+    ```bash
+    aws configure
+3. **Web Sitesi Kaynak Kodunu Hazırlayın** Dağıtılacak web sitesinin dosyalarını (örneğin WordPress dosyaları) bir dizine yerleştirin ve yolunu not edin.
+
+4. **Dağıtım Betiğini Çalıştırın**
+    Ansible playbook'u çalıştırarak dağıtımı başlatın:
+    ```bash
+    ansible-playbook deploy_app.yml
